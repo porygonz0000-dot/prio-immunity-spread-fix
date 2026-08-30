@@ -48,6 +48,16 @@ describe.each([
     expect(game.field.getPlayerPokemon()).toHaveUsedMove({ move: MoveId.QUICK_ATTACK, result: MoveResult.FAIL });
   });
 
+  it("should block enemy multi-target increased priority moves", async () => {
+    game.override.ability(AbilityId.TRIAGE);
+    await game.classicMode.startBattle(SpeciesId.FEEBAS);
+
+    game.move.use(MoveId.MATCHA_GOTCHA);
+    await game.toEndOfTurn();
+
+    expect(game.field.getPlayerPokemon()).toHaveUsedMove({ move: MoveId.MATCHA_GOTCHA, result: MoveResult.FAIL });
+  });
+
   describe("Doubles Interactions", () => {
     beforeEach(() => {
       game.override.battleStyle("double");
